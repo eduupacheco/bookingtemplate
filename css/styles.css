@@ -1,10 +1,34 @@
-.bg-img {
-    
-    background: linear-gradient(
-        rgba(255, 0, 0, 0.45), 
-        rgba(255, 0, 0, 0.45)
-      ), url(https://source.unsplash.com/CepDpEiALqM);
-    background-position: center;
-    background-size: cover;
-    color: red;
+.header {
+    background-color: rgb(0, 87, 185);
+    height: 110px;
 }
+
+.form-control {
+    border: none;
+    color: black;
+}
+
+.form-control::placeholder {
+    color: rgb(0, 0, 0);
+    opacity: 1;
+}
+
+.form-control:disabled {
+    background-color: white;
+}
+
+/* Usability */
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+
+.hide {
+    display: none;
+}
+
+.popover {
+    max-width: 100% !important;
+  }
