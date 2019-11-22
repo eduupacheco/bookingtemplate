@@ -6,14 +6,17 @@
 .form-control {
     border: none;
     color: black;
+    font-weight: bold;
 }
 
 .form-control::placeholder {
-    color: rgb(0, 0, 0);
+    color: black;
     opacity: 1;
+    font-weight: normal;
 }
 
 .form-control:disabled {
+    color: black !important;
     background-color: white;
 }
 
