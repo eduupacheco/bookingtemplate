@@ -1,5 +1,6 @@
 
 $('.popover-selection>.trigger').click(function () {
+    
     $(this).popover({
         html: true,
         placement: 'bottom',
@@ -19,5 +20,3 @@ function refreshPopover(){
         }
     }).popover('toggle').popover('toggle');
 }
-
-

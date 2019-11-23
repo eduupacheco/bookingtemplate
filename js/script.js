@@ -132,13 +132,13 @@ function doneQuantity(){
     if(adults > 1){
         value += ` & ${adults} Adults`
     } else {
-        value += ` & ${adults} Adults`
+        value += ` & ${adults} Adult`
     }
 
     if(children > 1){
-        value += ` & ${children} Child`
-    } else {
         value += ` & ${children} Children`
+    } else {
+        value += ` & ${children} Child`
     }
 
     document.getElementById('quantity-total').setAttribute('value', value)
