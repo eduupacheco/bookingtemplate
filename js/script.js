@@ -1,9 +1,9 @@
-var starnight = [4, 7, 10, 14]
+var popular_durations = [4, 7, 10, 14]
 
 window.onload = function () {
 
     initDate() // second input: calendar (check-in)
-    initComboNights(starnight) // third input: number of nights
+    initComboNights(popular_durations) // third input: number of nights
 
     chargeEvents()
 
@@ -17,6 +17,7 @@ function initDate() {
 function initComboNights(array) {
     var select = document.getElementById('select-nights')
 
+    select.insertAdjacentHTML('beforeend','<h6 class="dropdown-header">POPULAR DURATIONS</h6>')
     array.forEach(n => {
         var element = document.createElement('a');
         element.setAttribute('class', 'dropdown-item')
@@ -39,6 +40,7 @@ function initComboNights(array) {
     var element = document.createElement('div');
     element.setAttribute('class', 'dropdown-divider')
     select.appendChild(element)
+    select.insertAdjacentHTML('beforeend','<h6 class="dropdown-header">DAILY</h6>')
 
     for (let i = 0; i < 1000; i++) {
         var element = document.createElement('a');
