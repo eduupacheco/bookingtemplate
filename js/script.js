@@ -111,15 +111,23 @@ function addRoom(id) {
     element.setAttribute('class', 'col p-2 mt-4')
     element.setAttribute('style', 'width: 200px')
     element.innerHTML = `<h6 class="text-success align-middle"><span class="small rounded-circle bg-success text-white p-1 px-2">${id}</span> ROOM</h6>`
-        + `<div class="row m-0 mt-2"><div class="col-7 d-flex"><label class="m-0 align-self-center">Adults</label></div><div class="col-5 d-flex p-0"><input class="form-control" type="number" name="quantity-adults-room-${id}" id="quantity-adults-room-${id}" min="1" max="4" value="1"></div></div>`
-        + `<div class="row m-0 mt-2"><div class="col-7"><label class="m-0">Children</label><small class="d-block">(0-17Yrs)</small></div><div class="col-5 d-flex p-0"><input class="form-control align-self-center m-0" type="number" name="quantity-children-room-${id}" id="quantity-children-room-${id}" min="0" max="4" value="0"></div></div>`
+        + `<div class="row m-0 mt-2"><div class="col-7 d-flex"><label class="m-0 align-self-center">Adults</label></div><div class="col-5 d-flex p-0"><input class="form-control" type="number" name="quantity-adults" id="quantity-adults" min="1" max="4" value="1"></div></div>`
+        + `<div class="row m-0 mt-2"><div class="col-7"><label class="m-0">Children</label><small class="d-block">(0-17Yrs)</small></div><div class="col-5 d-flex p-0"><input class="form-control align-self-center m-0" type="number" name="quantity-children" id="quantity-children" min="0" max="4" value="0"></div></div>`
     document.getElementById('quantity').insertBefore(element, document.getElementById('quantity').lastChild.previousSibling)
 }
 
 function doneQuantity(){
-    var adults = 8
-    var children = 7
+    var adults = 0
+    var children = 0
     var nrooms = document.getElementById('quantity').childElementCount-1
+
+    document.querySelectorAll(`.popover input[id=quantity-adults`).forEach(element => {
+        adults += parseInt(element.value)
+    });
+
+    document.querySelectorAll(`.popover input[id=quantity-children`).forEach(element => {
+        children += parseInt(element.value)
+    });
 
     var value = ''
 
@@ -137,10 +145,11 @@ function doneQuantity(){
 
     if(children > 1){
         value += ` & ${children} Children`
-    } else {
+    }
+    if(children == 1) {
         value += ` & ${children} Child`
     }
-
+        
     document.getElementById('quantity-total').setAttribute('value', value)
 }
 
