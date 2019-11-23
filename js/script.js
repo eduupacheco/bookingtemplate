@@ -166,6 +166,6 @@ function getValues() {
         console.log(`Numbers of nights: ${nnights}`)
         console.log(`For: ${quantitytotal}`)
     } else {
-        console.log('Fill the fields please, to do the searching...')
+        console.log('Please, fill all fields to do the search...')
     }
 }
