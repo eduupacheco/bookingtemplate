@@ -17,12 +17,13 @@ function initDate() {
 function initComboNights(array) {
     var select = document.getElementById('select-nights')
 
-    select.insertAdjacentHTML('beforeend','<h6 class="dropdown-header">POPULAR DURATIONS</h6>')
+    select.insertAdjacentHTML('beforeend', '<h6 class="dropdown-header">POPULAR DURATIONS</h6>')
     array.forEach(n => {
         var element = document.createElement('a')
         element.setAttribute('class', 'dropdown-item')
         element.setAttribute('href', '#')
         element.setAttribute('id', `night-${n}`)
+        element.setAttribute('style', 'font-weight: bold')
 
         var value = ''
         if (n > 1) {
@@ -40,7 +41,7 @@ function initComboNights(array) {
     var element = document.createElement('div')
     element.setAttribute('class', 'dropdown-divider')
     select.appendChild(element)
-    select.insertAdjacentHTML('beforeend','<h6 class="dropdown-header">DAILY</h6>')
+    select.insertAdjacentHTML('beforeend', '<h6 class="dropdown-header">DAILY</h6>')
 
     for (let i = 0; i < 90; i++) {
         var element = document.createElement('a')
@@ -95,14 +96,39 @@ function chargeEvents() {
         deleteRoom()
     })
 
+    // Event for generate year selectors and verify the quantity of children
+    event(document, 'input', '#quantity-children', function (event) {
+        if(this.value > 4 || this.value < 0){
+            this.value = 0
+        }
+        generateYearChildrenDiv(this.value, this.getAttribute('room'))
+        refreshPopover()
+    })
+
+    // Event for verify the quantity of adults
+    event(document, 'input', '#quantity-adults', function (event) {
+        if(this.value > 4 || this.value < 1){
+            this.value = 1
+        }
+        refreshPopover()
+    })
+    
+    // Event for verify the value of date
+    event(document, 'input', '#checkin', function (event) {
+        verifyDateValue()
+        refreshPopover()
+    })
+
+    event(document, 'input', 'div[id^=year-children-div-room-] input', function (event) {
+        if(this.value < 0 || this.value > 17){
+            this.value = 0
+        }
+    })
+
     // Event for search
     event(document, 'click', '#search', function (event) {
         getValues()
     })
-
-    controlAddRoom()
-    controlDeleteRoom()
-
 }
 
 function event(el, evt, sel, handler) {
@@ -124,13 +150,14 @@ function addRoom(id) {
     element.setAttribute('style', 'width: 200px')
     element.innerHTML = `<h6 class="text-success align-middle"><span class="small rounded-circle bg-success text-white p-1 px-2">${id}</span> ROOM</h6>`
         + `<div class="row m-0 mt-2"><div class="col-7 d-flex"><label class="m-0 align-self-center">Adults</label></div><div class="col-5 d-flex p-0"><input class="form-control" type="number" name="quantity-adults" id="quantity-adults" min="1" max="4" value="1"></div></div>`
-        + `<div class="row m-0 mt-2"><div class="col-7"><label class="m-0">Children</label><small class="d-block">(0-17Yrs)</small></div><div class="col-5 d-flex p-0"><input class="form-control align-self-center m-0" type="number" name="quantity-children" id="quantity-children" min="0" max="4" value="0"></div></div>`
-    document.querySelector('#quantity').insertBefore(element, document.querySelector('#quantity').lastChild.previousSibling)
+        + `<div class="row m-0 mt-2"><div class="col-7"><label class="m-0">Children</label><small class="d-block">(0-17Yrs)</small></div><div class="col-5 d-flex p-0"><input class="form-control align-self-center m-0" type="number" name="quantity-children" id="quantity-children" room="${id}" min="0" max="4" value="0"></div><div id="year-children-div-room-${id}" class="row m-0 mt-2 w-100"></div></div>`
+    //document.querySelector('#quantity').insertBefore(element, document.querySelector('#quantity').lastChild.previousSibling)
+    document.querySelector('.popover-body #quantity').insertBefore(element, document.querySelector('.popover-body #quantity').lastChild.previousSibling)
 }
 
-function deleteRoom(){
+function deleteRoom() {
     var id = document.getElementById('quantity').childElementCount
-    if(id > 2){
+    if (id > 2) {
         document.querySelector('#quantity').removeChild(document.querySelector('#quantity').lastElementChild.previousElementSibling)
     }
 
@@ -139,15 +166,15 @@ function deleteRoom(){
     refreshPopover()
 }
 
-function controlDeleteRoom(){
+function controlDeleteRoom() {
     var id = document.getElementById('quantity').childElementCount
-    if(id > 2)
+    if (id > 2)
         document.getElementById('btn-deleteroom').disabled = false
     else
         document.getElementById('btn-deleteroom').disabled = true
 }
 
-function controlAddRoom(){
+function controlAddRoom() {
     var id = document.getElementById('quantity').childElementCount
     if (id < 5)
         document.getElementById('btn-addroom').disabled = false
@@ -155,10 +182,26 @@ function controlAddRoom(){
         document.getElementById('btn-addroom').disabled = true
 }
 
-function doneQuantity(){
+function generateYearChildrenDiv(values, idroom) {
+    if(values > 4 || values < 0){
+        values = 1
+    } 
+    var html = ''
+    for (let i = 0; i < values; i++) {
+        html += `<div class="col-6 mb-2">
+            <h6 class="small">Edad:</h6>
+            <div class="input-group-append">
+                <input class="form-control bg-warning text-white" type="number" min="0" max="17" value="12">
+            </div>
+        </div>`
+    }
+    document.getElementById('year-children-div-room-' + idroom).innerHTML = html;
+}
+
+function doneQuantity() {
     var adults = 0
     var children = 0
-    var nrooms = document.getElementById('quantity').childElementCount-1
+    var nrooms = document.getElementById('quantity').childElementCount - 1
 
     document.querySelectorAll(`.popover input[id=quantity-adults`).forEach(element => {
         adults += parseInt(element.value)
@@ -170,25 +213,25 @@ function doneQuantity(){
 
     var value = ''
 
-    if(nrooms > 1){
+    if (nrooms > 1) {
         value += `${nrooms} Rooms`
     } else {
         value += `${nrooms} Room`
     }
 
-    if(adults > 1){
+    if (adults > 1) {
         value += ` & ${adults} Adults`
     } else {
         value += ` & ${adults} Adult`
     }
 
-    if(children > 1){
+    if (children > 1) {
         value += ` & ${children} Children`
     }
-    if(children == 1) {
+    if (children == 1) {
         value += ` & ${children} Child`
     }
-        
+
     document.getElementById('quantity-total').setAttribute('value', value)
 }
 
@@ -206,5 +249,11 @@ function getValues() {
         console.log(`For: ${quantitytotal}`)
     } else {
         console.log('Please, fill all fields to do the search...')
+    }
+}
+
+function verifyDateValue(){
+    if(document.getElementById('checkin').value < moment().format().substr(0, 10)){
+        document.getElementById('checkin').value = moment().format().substr(0, 10)
     }
 }
