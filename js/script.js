@@ -8,12 +8,17 @@ window.onload = function () {
     chargeEvents()
 }
 
-
+/**
+ * This function init the 'Checkin' element (in this case its an input with date type)
+ */
 function initDate() {
     document.getElementById('checkin').value = moment().format().substr(0, 10)
     document.getElementById('checkin').setAttribute('min', moment().format().substr(0, 10))
 }
 
+/**
+ * This function init the 'ComboNights' elements
+ */
 function initComboNights(array) {
     var select = document.getElementById('select-nights')
 
@@ -63,6 +68,9 @@ function initComboNights(array) {
     }
 }
 
+/**
+ * This function charges all events
+ */
 function chargeEvents() {
 
     // Event for dropdowns
@@ -131,6 +139,17 @@ function chargeEvents() {
     })
 }
 
+/**
+ * This function is a translated function from JQuery to JS, where the params are 
+ * el (document), 
+ * evt (type of event could be input, click, blur, etc..),
+ * sel (is a selector for get an specific element),
+ * handler (the function to do when the eventlistener is running)
+ * @param {*} el 
+ * @param {*} evt 
+ * @param {*} sel 
+ * @param {*} handler 
+ */
 function event(el, evt, sel, handler) {
     el.addEventListener(evt, function (event) {
         var t = event.target
@@ -143,6 +162,10 @@ function event(el, evt, sel, handler) {
     })
 }
 
+/**
+ * Function passing an id (this) that add a room
+ * @param {*} id 
+ */
 function addRoom(id) {
     var element = document.createElement('div')
     element.setAttribute('id', 'room-' + id)
@@ -154,6 +177,10 @@ function addRoom(id) {
     document.querySelector('.popover-body #quantity').insertBefore(element, document.querySelector('.popover-body #quantity').lastChild.previousSibling)
 }
 
+/**
+ * Function passing an id (this) that eliminates a room
+ * @param {*} id 
+ */
 function deleteRoom(id) {
     var numberofrooms = document.getElementById('quantity').childElementCount
     if (numberofrooms > 2) {
@@ -167,6 +194,9 @@ function deleteRoom(id) {
     refreshPopover()
 }
 
+/**
+ * Function that controls the number of rooms on DOM and enable and disable some buttons for cancel functions when the user add a room
+ */
 function controlDeleteRoom() {
     var id = document.getElementById('quantity').childElementCount
     if (id > 2)
@@ -175,6 +205,9 @@ function controlDeleteRoom() {
         document.getElementById('btn-deleteroom').disabled = true
 }
 
+/**
+ * Function that controls the number of rooms on DOM and enable and disable some buttons for cancel functions when the user delete a room
+ */
 function controlAddRoom() {
     var id = document.getElementById('quantity').childElementCount
     if (id < 5)
@@ -183,6 +216,9 @@ function controlAddRoom() {
         document.getElementById('btn-addroom').disabled = true
 }
 
+/**
+ * This function refresh the year zone div for year's children
+ */
 function refreshYearChildrenDiv() {
     for(var i = 1; i < document.getElementById('quantity').childElementCount; i++){
         console.log(i)
@@ -194,6 +230,11 @@ function refreshYearChildrenDiv() {
     }
 }
 
+/**
+ * This function generates the div for the year zone for each child. The values are 
+ * @param {*} values 
+ * @param {*} idroom
+ */
 function generateYearChildrenDiv(values, idroom) {
     if (values > 4 || values < 0) {
         values = 1
@@ -210,6 +251,9 @@ function generateYearChildrenDiv(values, idroom) {
     document.getElementById('year-children-div-room-' + idroom).innerHTML = html;
 }
 
+/**
+ * This function is for a button when the user has put the quantity of adults and children
+ */
 function doneQuantity() {
     var adults = 0
     var children = 0
@@ -247,6 +291,9 @@ function doneQuantity() {
     document.getElementById('quantity-total').setAttribute('value', value)
 }
 
+/**
+ * This function working for get the values
+ */
 function getValues() {
     var destination = document.getElementById('destination').value
     var checkin = document.getElementById('checkin').value
@@ -264,6 +311,9 @@ function getValues() {
     }
 }
 
+/**
+ * This function verifies the date value
+ */
 function verifyDateValue() {
     if (document.getElementById('checkin').value < moment().format().substr(0, 10)) {
         document.getElementById('checkin').value = moment().format().substr(0, 10)

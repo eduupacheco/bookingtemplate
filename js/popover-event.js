@@ -1,15 +1,5 @@
-// Create content from HTML
-/*$('.popover-selection>.trigger').click(function () {
-    $(this).popover({
-        html: true,
-        placement: 'bottom',
-        content: function () {
-            return $(this).parent().find('.popover-div').html();
-        }
-    }).popover('toggle');
-});*/
 
-// Generate content from code JQuery
+// Generate content for popover from code JQuery
 $('.popover-selection>.trigger').click(function () {
     $(this).popover({
         html: true,
@@ -58,7 +48,10 @@ $('.popover-selection>.trigger').click(function () {
     })
 });
 
-// This is for refresh the popover
+/**
+ * This is for refresh the popover
+ * 
+ * */ 
 function refreshPopover(){
     $('.popover-selection>.trigger').popover({
         html: true,
