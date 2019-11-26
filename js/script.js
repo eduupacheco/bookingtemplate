@@ -93,12 +93,12 @@ function chargeEvents() {
 
     // Event for delete rooms
     event(document, 'click', '#btn-deleteroom', function (event) {
-        deleteRoom()
+        deleteRoom(this.getAttribute('room'))
     })
 
     // Event for generate year selectors and verify the quantity of children
     event(document, 'input', '#quantity-children', function (event) {
-        if(this.value > 4 || this.value < 0){
+        if (this.value > 4 || this.value < 0) {
             this.value = 0
         }
         generateYearChildrenDiv(this.value, this.getAttribute('room'))
@@ -107,12 +107,12 @@ function chargeEvents() {
 
     // Event for verify the quantity of adults
     event(document, 'input', '#quantity-adults', function (event) {
-        if(this.value > 4 || this.value < 1){
+        if (this.value > 4 || this.value < 1) {
             this.value = 1
         }
         refreshPopover()
     })
-    
+
     // Event for verify the value of date
     event(document, 'input', '#checkin', function (event) {
         verifyDateValue()
@@ -120,7 +120,7 @@ function chargeEvents() {
     })
 
     event(document, 'input', 'div[id^=year-children-div-room-] input', function (event) {
-        if(this.value < 0 || this.value > 17){
+        if (this.value < 0 || this.value > 17) {
             this.value = 0
         }
     })
@@ -146,21 +146,22 @@ function event(el, evt, sel, handler) {
 function addRoom(id) {
     var element = document.createElement('div')
     element.setAttribute('id', 'room-' + id)
-    element.setAttribute('class', 'col p-2 mt-4')
+    element.setAttribute('class', 'col p-2 mt-4 room')
     element.setAttribute('style', 'width: 200px')
-    element.innerHTML = `<h6 class="text-success align-middle"><span class="small rounded-circle bg-success text-white p-1 px-2">${id}</span> ROOM</h6>`
-        + `<div class="row m-0 mt-2"><div class="col-7 d-flex"><label class="m-0 align-self-center">Adults</label></div><div class="col-5 d-flex p-0"><input class="form-control" type="number" name="quantity-adults" id="quantity-adults" min="1" max="4" value="1"></div></div>`
-        + `<div class="row m-0 mt-2"><div class="col-7"><label class="m-0">Children</label><small class="d-block">(0-17Yrs)</small></div><div class="col-5 d-flex p-0"><input class="form-control align-self-center m-0" type="number" name="quantity-children" id="quantity-children" room="${id}" min="0" max="4" value="0"></div><div id="year-children-div-room-${id}" class="row m-0 mt-2 w-100"></div></div>`
-    //document.querySelector('#quantity').insertBefore(element, document.querySelector('#quantity').lastChild.previousSibling)
+    element.innerHTML = `<div class="row d-flex justify-content-between"><h6 class="col text-success align-self-center"><span class="small rounded-circle bg-success text-white p-1 px-2 nroom">${id}</span> ROOM</h6>
+    <button id="btn-deleteroom" class="btn btn-danger m-0 mt-2 mr-4" room="${id}"><i class="fas fa-trash"></i></button></div>
+    <div class="row m-0 mt-2"><div class="col-7 d-flex"><label class="m-0 align-self-center">Adults</label></div><div class="col-5 d-flex p-0"><input class="form-control" type="number" name="quantity-adults" id="quantity-adults" min="1" max="4" value="1"></div></div><div class="row m-0 mt-2"><div class="col-7"><label class="m-0">Children</label><small class="d-block">(0-17Yrs)</small></div><div class="col-5 d-flex p-0"><input class="form-control align-self-center m-0" type="number" name="quantity-children" id="quantity-children" room="${id}" min="0" max="4" value="0"></div><div id="year-children-div-room-${id}" class="row m-0 mt-2 w-100"></div></div>`
     document.querySelector('.popover-body #quantity').insertBefore(element, document.querySelector('.popover-body #quantity').lastChild.previousSibling)
 }
 
-function deleteRoom() {
-    var id = document.getElementById('quantity').childElementCount
-    if (id > 2) {
-        document.querySelector('#quantity').removeChild(document.querySelector('#quantity').lastElementChild.previousElementSibling)
+function deleteRoom(id) {
+    var numberofrooms = document.getElementById('quantity').childElementCount
+    if (numberofrooms > 2) {
+        document.querySelector('#quantity').removeChild(document.querySelector('#room-'+id))
     }
 
+    
+    refreshYearChildrenDiv()
     controlAddRoom()
     controlDeleteRoom()
     refreshPopover()
@@ -182,10 +183,21 @@ function controlAddRoom() {
         document.getElementById('btn-addroom').disabled = true
 }
 
+function refreshYearChildrenDiv() {
+    for(var i = 1; i < document.getElementById('quantity').childElementCount; i++){
+        console.log(i)
+        document.getElementsByClassName('room')[i-1].setAttribute('id','room-'+i)
+        document.getElementsByClassName('nroom')[i-1].innerHTML = i
+        document.querySelectorAll('button[room]')[i-1].setAttribute('room', i)
+        document.querySelectorAll('input[room]')[i-1].setAttribute('room', i)
+        document.querySelectorAll('div[id^=year-children-div-room-]')[i-1].setAttribute('id', 'year-children-div-room-'+i)
+    }
+}
+
 function generateYearChildrenDiv(values, idroom) {
-    if(values > 4 || values < 0){
+    if (values > 4 || values < 0) {
         values = 1
-    } 
+    }
     var html = ''
     for (let i = 0; i < values; i++) {
         html += `<div class="col-6 mb-2">
@@ -252,8 +264,8 @@ function getValues() {
     }
 }
 
-function verifyDateValue(){
-    if(document.getElementById('checkin').value < moment().format().substr(0, 10)){
+function verifyDateValue() {
+    if (document.getElementById('checkin').value < moment().format().substr(0, 10)) {
         document.getElementById('checkin').value = moment().format().substr(0, 10)
     }
 }

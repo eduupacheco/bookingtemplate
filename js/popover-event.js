@@ -16,9 +16,11 @@ $('.popover-selection>.trigger').click(function () {
         placement: 'bottom',
         content: `<div class="popover-div show" style="max-width: auto">
         <div id="quantity" class="row m-0">
-            <div id="room-1" class="col p-2 mt-4" style="width: 200px">
-                <h6 class="text-success align-middle align-self-center"><span
-                        class="small rounded-circle bg-success text-white p-1 px-2">1</span> ROOM</h6>
+            <div id="room-1" class="col p-2 mt-4 room" style="width: 200px">
+                <div class="row d-flex justify-content-between">
+                    <h6 class="col text-success align-self-center"><span class="small rounded-circle bg-success text-white p-1 px-2 nroom">1</span> ROOM</h6>
+                    <button id="btn-deleteroom" class="btn btn-danger m-0 mt-2 mr-4" room="1" disabled><i class="fas fa-trash"></i></button>
+                </div>
                 <div class="row m-0 mt-2">
                     <div class="col-7 d-flex">
                         <label class="m-0 align-self-center">Adults</label>
@@ -48,8 +50,6 @@ $('.popover-selection>.trigger').click(function () {
                     <div class="text-primary w-100 text-center m-0">ADD ROOM</div>
                 </button>
                 <div class="col-12 d-flex justify-content-between p-0">
-                    <button id="btn-deleteroom" class="btn btn-danger m-0 mt-2 mr-4" disabled><i
-                            class="fas fa-trash"></i></button>
                     <button id="done-quantity" class="btn btn-primary m-0 mt-2">DONE</button>
                 </div>
             </div>
@@ -66,7 +66,7 @@ function refreshPopover(){
         content: function () {
             return $(this).parent().find('.popover-div').html();
         }
-    }).popover('toggle').popover('toggle');
+    }).popover('update');
 
 
 }
